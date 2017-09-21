@@ -1,0 +1,37 @@
+body{
+	font-family: Verdana;
+}
+
+.file {
+    position: relative;
+    display: block;
+    margin: auto;
+    max-width: 200px;
+    text-align: center;
+    background-color: #324D5C;
+    color: #46B29D;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+.file input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+#c2{
+	display: block;
+	margin: auto;
+	max-width: 600px;
+}
+
+#c1{
+	display: block;
+	margin: auto;
+	max-width: 90%;
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Pareto - Hypervolume</title>
+		<link rel="stylesheet" href="css/styles.css">
+		<script src="js/chart.min.js"></script>
+		<script src="js/loadFile.js"></script>
+		<script src="js/calcPareto.js"></script>
+		<script src="js/graph.js"></script>
+		<script src="js/hyperVolume.js"></script>
+	</head>
+	<body>
+		<div class="file">
+			Cargar archivo
+			<input type="file" onchange="loadFile(this)"/>
+		</div>
+		<canvas id="c1"></canvas>
+		<canvas id="c2"></canvas>
+	</body>
+</html>
