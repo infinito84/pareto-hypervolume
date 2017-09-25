@@ -6,7 +6,7 @@ var round = function(hvol){
 	return fixed;
 }
 
-var hyperVolume = function(frontier, ref){
+var hyperVolume2 = function(frontier, ref){
 	var referencePoint = ref;
 	frontier = frontier.map(function(p){
 		return {
@@ -29,27 +29,17 @@ var hyperVolume = function(frontier, ref){
 	return round(hvol);
 };
 
+//código profe bula
 var hyperVolume = function(frontier, ref){
-	var referencePoint = ref;
-	frontier = frontier.map(function(p){
-		return {
-			x : p.x - referencePoint.x,
-			y : p.y - referencePoint.y
+	var ideal = ref.y - frontier[0].y; // inicia con el primer punto
+	var h = 0;
+	frontier.forEach(function(p, i){
+		if(i > 0){
+			ideal = frontier[i - 1].y - p.y;
 		}
-	})
-
-	var hvol = 0.0;
-	var q = frontier.shift();
-	var h = q.x;
-	frontier.forEach(function(p){
-		hvol += h * (q.y - p.y);
-		if(p.x < h){
-			h = p.x;
-		}
-		q = p;
+		h += (ref.x - p.x) * ideal;
 	});
-	hvol += h * q.y;
-	return round(hvol);
+	return h;
 };
 
 
