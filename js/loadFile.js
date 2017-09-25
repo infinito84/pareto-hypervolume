@@ -1,4 +1,4 @@
-var loadFile = function(input) {
+window.loadFile = function(input) {
     if (input.files[0]) {
         var reader = new FileReader();
 

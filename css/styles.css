@@ -2,7 +2,7 @@ body{
 	font-family: Verdana;
 }
 
-.file {
+.file , button{
     position: relative;
     display: block;
     margin: auto;
@@ -34,4 +34,29 @@ body{
 	display: block;
 	margin: auto;
 	max-width: 90%;
+}
+
+.nadir{
+	text-align: center;
+	margin: 2em 0 1em;
+	display: none;
+}
+
+.nadir input{
+	border: none;
+	border-bottom: 2px solid #F25C05;
+	width: 100px;
+	margin: 0 10px;
+	text-align: center;
+	color: #324D5C;
+	font-size: 14px;
+	padding: 3px 0;
+	vertical-align: text-bottom;
+}
+
+.nadir button{
+	display: inline-block;
+	vertical-align: text-bottom;
+	border: none;
+	font-size: 14px;
 }

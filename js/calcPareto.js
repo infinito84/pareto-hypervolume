@@ -3,7 +3,13 @@ var dominates = function(a, b){
 }
 
 var calcPareto = function(data){
-	var frontiers = [];
+	window.nadir = {x:0, y: 0};
+	data.forEach(function(p){
+		if(p.x > nadir.x) nadir.x = p.x;
+		if(p.y > nadir.y) nadir.y = p.y;
+	})
+
+	window.frontiers = [];
 	while(data.length){
 		var no = [];
 		var si = [];
@@ -25,6 +31,6 @@ var calcPareto = function(data){
 		data = si;
 		frontiers.push(no);
 	}
-	graph(frontiers);
-	graphHyperVolume(frontiers);
+	graph(frontiers, nadir);
+	console.log('Nadir', nadir)
 }

@@ -7,15 +7,30 @@ var round = function(hvol){
 }
 
 var hyperVolume = function(frontier, ref){
-	var referencePoint = ref || {x:0, y :0};
+	var referencePoint = ref;
+	frontier = frontier.map(function(p){
+		return {
+			x : p.x - referencePoint.x,
+			y : p.y - referencePoint.y
+		}
+	})
+
+	var hvol = 0.0;
+	var q = frontier.shift();
+	var h = q.x;
 	frontier.forEach(function(p){
-		if(p.x > referencePoint.x){
-			referencePoint.x = p.x;
+		hvol += h * (q.y - p.y);
+		if(p.x < h){
+			h = p.x;
 		}
-		if(p.y > referencePoint.y){
-			referencePoint.y = p.y;
-		}
+		q = p;
 	});
+	hvol += h * q.y;
+	return round(hvol);
+};
+
+var hyperVolume = function(frontier, ref){
+	var referencePoint = ref;
 	frontier = frontier.map(function(p){
 		return {
 			x : p.x - referencePoint.x,

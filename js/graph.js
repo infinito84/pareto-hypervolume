@@ -4,19 +4,33 @@ var colors = [
 	'#0E1954', '#044F88', '#5BB451', '#D14836', '#000000'
 ];
 
-var graph = function(frontiers) {
+var inputX = document.querySelector('.nadir input:nth-child(1)');
+var inputY = document.querySelector('.nadir input:nth-child(2)');
+var button = document.querySelector('.nadir button');
+var form = document.querySelector('.nadir');
+
+var graph = function(frontiers, nadir) {
 	if(window.draw) draw.destroy();
     var graphics = document.querySelector('canvas#c1').getContext('2d');
 
     window.draw = Chart.Scatter(graphics, {
         data: {
-			datasets : frontiers.map(function(data, i){
+			datasets : frontiers.concat([[nadir, nadir, nadir]]).map(function(data, i){
 				var color = colors[i] || '#000000';
+				var color2 = Chart.helpers.color(color).alpha(0.2).rgbString();
 				var label = i === 0 ? 'No' : 'Sí';
+				label = (i+1) +') '+label+' = '+data.length;
+				// si es el punto nadir
+				if(frontiers.length === i){
+					label = 'Reference Point';
+					color = '#ff0000';
+					color2 = '#ff0000';
+				}
 				return {
-					label : (i+1) +') '+label+' = '+data.length,
+					label : label,
 					borderColor : color,
-					backgroundColor: Chart.helpers.color(color).alpha(0.2).rgbString(),
+					backgroundColor: color2,
+					lineTension : 0,
 					data : data.slice(0).sort(function(a, b){
 						return a.x - b.x;
 					})
@@ -26,7 +40,7 @@ var graph = function(frontiers) {
         options: {
             title: {
                 display: true,
-                text: 'Optimalidad de Pareto ('+ frontiers.length +' frentes)'
+                text: 'Optimalidad de Pareto ('+ frontiers.length +' frentes), Hypervolume ('+hyperVolume(frontiers[0], nadir)+')'
             },
 			legend: {
        			display: true,
@@ -36,57 +50,33 @@ var graph = function(frontiers) {
 					boxWidth : 10
 				},
 				onClick : function(e, obj){
-					// Si se presiona shift, muestra la línea
-					if(e.shiftKey){
-						var data = draw.data.datasets[obj.datasetIndex];
-						data.showLine = !data.showLine;
-						if(!data.showLine){
-							setTimeout(function(){
-								data._meta[0].dataset._view.fill = false;
-								draw.update();
-							}, 50);
-						}
+					if(obj.datasetIndex === frontiers.length) return;
 
-					}
-					else{
-						var data = draw.data.datasets[obj.datasetIndex];
-						data.hidden = !data.hidden;
+					var data = draw.data.datasets[obj.datasetIndex];
+					data.showLine = !data.showLine;
+					if(!data.showLine){
+						setTimeout(function(){
+							data._meta[0].dataset._view.fill = false;
+							draw.update();
+						}, 50);
+						setTimeout(function(){
+							data._meta[0].dataset._view.fill = false;
+							draw.update();
+						}, 500);
 					}
 					draw.update();
 				}
   			}
         }
     });
+
+	inputX.value = nadir.x;
+	inputY.value = nadir.y;
+	form.style.display = 'block';
 }
 
-var graphHyperVolume = function(frontiers) {
-	if(window.hyperDraw) hyperDraw.destroy();
-    var graphics = document.querySelector('canvas#c2').getContext('2d');
-
-    window.hyperDraw = new Chart.Line(graphics, {
-        data: {
-			labels : frontiers.map(function(frontier, i){
-				return ''+(frontiers.length - i)
-			}),
-			datasets : [{
-				borderColor : colors[1],
-				backgroundColor: Chart.helpers.color(colors[1]).alpha(0.2).rgbString(),
-				data : frontiers.reverse().map(function(frontier, i){
-					return {
-						x : i,
-						y : hyperVolume(frontier)
-					}
-				})
-			}]
-		},
-        options: {
-            title: {
-                display: true,
-                text: 'Hypervolume = '+ hyperVolume(frontiers.pop())
-            },
-			legend: {
-       			display: false,
-  			}
-        }
-    });
+button.onclick = function(){
+	nadir.x = parseFloat(inputX.value);
+	nadir.y = parseFloat(inputY.value);
+	graph(frontiers, nadir);
 }
