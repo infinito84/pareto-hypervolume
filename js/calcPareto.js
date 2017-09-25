@@ -32,5 +32,6 @@ var calcPareto = function(data){
 		frontiers.push(no);
 	}
 	graph(frontiers, nadir);
+	showFrontiers(frontiers);
 	console.log('Nadir', nadir)
 }
